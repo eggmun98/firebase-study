@@ -17,7 +17,7 @@ export default function BoardDetailUI() {
 
   useEffect(() => {
     const fetchBoard = async () => {
-      const board = doc(collection(getFirestore(app), "board"), router);
+      const board = doc(collection(getFirestore(app), "board"), `${router}`);
       // 초기화할 파이어베이스 객체, 참조할 컬렉션 이름, 그 문서의 가져올 아이디값
       const result = await getDoc(board);
       // getDoc를 사용하면 하나의 문서를 가져올 수 있음
