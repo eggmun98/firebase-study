@@ -22,6 +22,15 @@ export default function BoardWriteUI() {
     alert("게시글 등록에 성공하였습니다.");
   };
 
+  // 다른 방식의 문서를 추가하는 방법이다!!
+  //  useEffect(() => {
+  // const board = firestore.collection("bucket");
+  // board이라는 변수로 firestore의 collection인 board에 접근
+  // bucket.doc("info").set({ writer: '성진', title: "반가워요" });
+  // board 콜렉션의 info 문서에 {writer: '성진';, title: "반가워요"} 데이터 추가.
+  // 새로 만들거나 덮어쓰기
+  // });
+
   const onChangeWrite = (e: ChangeEvent<HTMLInputElement>) => {
     setWriter(e.target.value); // target은 현재 이벤트 발생의 위치에서 자식의 위치를 알려줌
   };
