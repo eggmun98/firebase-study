@@ -10,14 +10,12 @@ import {
 } from "firebase/firestore/lite";
 import { app } from "../../../commons/firebase";
 import { useRouter } from "next/router";
-import { update } from "firebase/database";
 
 export default function BoardWriteUI(props) {
   const [writer, setWriter] = useState("");
   const [title, setTitle] = useState("");
   const [contents, setContents] = useState("");
-  const router = useRouter().query.id;
-
+  const router = useRouter();
   const onClickSubmit = async () => {
     const board = collection(getFirestore(app), "board");
     // collection은 특정 컬렉션에 대한 참조를 생성하는 역할을 한다.
@@ -30,6 +28,7 @@ export default function BoardWriteUI(props) {
     // 왼쪽 매개변수 자리에는 참조할 컬렉션을 말하는 거다.
     // 오른쪽은 추가할 문서의 데이터를 담는다.
     alert("게시글 등록에 성공하였습니다.");
+    router.push(`/boards/board/${router.query.id}`);
   };
 
   // 다른 방식의 문서를 추가하는 방법이다!!
@@ -42,13 +41,17 @@ export default function BoardWriteUI(props) {
   // });
 
   const onClickEdit = async () => {
-    const board = doc(collection(getFirestore(app), "board"), `${router}`);
+    const board = doc(
+      collection(getFirestore(app), "board"),
+      `${router.query.id}`
+    );
     // 문서의 참조를 가져오기 위해 doc() 함수를 이용해야 한다.
     // 첫번째 인자에는 컬렉션의 참조를 전달하고, 두번째 인자에는 수정할 문서의 id를 전달해야 한다.
     await updateDoc(board, { writer, title, contents });
     // updateDoc() 함수는 파이어베이스에서 문서를 업데이트할 때 사용하는 함수이다.
     // 첫 번째 인자에는 수정할 문서의 참조를 전달하고, 두번째 인자에는 수정할 데이터가 담긴 객체를 전달해야 한다.
     alert("게시글을 수정하였습니다.");
+    router.push(`/boards/board/${router.query.id}`);
   };
 
   const onChangeWrite = (e: ChangeEvent<HTMLInputElement>) => {
@@ -61,6 +64,10 @@ export default function BoardWriteUI(props) {
 
   const onChangeContents = (e: ChangeEvent<HTMLInputElement>) => {
     setContents(e.target.value);
+  };
+
+  const onClickPageMove = () => {
+    router.push(`/boards/board/${router.query.id}`);
   };
 
   return (
@@ -77,6 +84,7 @@ export default function BoardWriteUI(props) {
       <button onClick={props.isEdit ? onClickEdit : onClickSubmit}>
         {props.isEdit ? "수정하기" : "등록하기"}
       </button>
+      <button onClick={onClickPageMove}>뒤로가기</button>
     </S.Wrapper>
   );
 }
