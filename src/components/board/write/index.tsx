@@ -1,12 +1,22 @@
 import { ChangeEvent, useState } from "react";
 import * as S from "./styleds";
-import { collection, getFirestore, addDoc } from "firebase/firestore/lite";
+import {
+  collection,
+  getFirestore,
+  addDoc,
+  Firestore,
+  doc,
+  updateDoc,
+} from "firebase/firestore/lite";
 import { app } from "../../../commons/firebase";
+import { useRouter } from "next/router";
+import { update } from "firebase/database";
 
-export default function BoardWriteUI() {
+export default function BoardWriteUI(props) {
   const [writer, setWriter] = useState("");
   const [title, setTitle] = useState("");
   const [contents, setContents] = useState("");
+  const router = useRouter().query.id;
 
   const onClickSubmit = async () => {
     const board = collection(getFirestore(app), "board");
@@ -31,6 +41,16 @@ export default function BoardWriteUI() {
   // 새로 만들거나 덮어쓰기
   // });
 
+  const onClickEdit = async () => {
+    const board = doc(collection(getFirestore(app), "board"), `${router}`);
+    // 문서의 참조를 가져오기 위해 doc() 함수를 이용해야 한다.
+    // 첫번째 인자에는 컬렉션의 참조를 전달하고, 두번째 인자에는 수정할 문서의 id를 전달해야 한다.
+    await updateDoc(board, { writer, title, contents });
+    // updateDoc() 함수는 파이어베이스에서 문서를 업데이트할 때 사용하는 함수이다.
+    // 첫 번째 인자에는 수정할 문서의 참조를 전달하고, 두번째 인자에는 수정할 데이터가 담긴 객체를 전달해야 한다.
+    alert("게시글을 수정하였습니다.");
+  };
+
   const onChangeWrite = (e: ChangeEvent<HTMLInputElement>) => {
     setWriter(e.target.value); // target은 현재 이벤트 발생의 위치에서 자식의 위치를 알려줌
   };
@@ -54,7 +74,9 @@ export default function BoardWriteUI() {
       <div>
         내용: <input onChange={onChangeContents}></input>
       </div>
-      <button onClick={onClickSubmit}>등록하기</button>
+      <button onClick={props.isEdit ? onClickEdit : onClickSubmit}>
+        {props.isEdit ? "수정하기" : "등록하기"}
+      </button>
     </S.Wrapper>
   );
 }
