@@ -42,6 +42,7 @@ export default function BoardDetailUI() {
       <div>작성자: {dataBoard?.writer} </div>
       <div>제목: {dataBoard?.title}</div>
       <div>내용: {dataBoard?.contents} </div>
+      <div>시간: {dataBoard?.time}</div>
       <button onClick={onClickPageMove}>수정하기</button>
       <button onClick={onClickPageMove02}>목록가기</button>
     </Wrapper>

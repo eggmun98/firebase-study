@@ -40,6 +40,7 @@ export default function BoardListUI() {
           <div>작성자: {el.writer}</div>
           <div>제목: {el.title}</div>
           <div>내용: {el.contents}</div>
+          <div>시간: {el.time}</div>
         </div>
       ))}
     </Wrapper>

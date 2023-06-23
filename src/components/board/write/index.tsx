@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import * as S from "./styleds";
 import {
   collection,
@@ -16,14 +16,29 @@ export default function BoardWriteUI(props) {
   const [title, setTitle] = useState("");
   const [contents, setContents] = useState("");
   const router = useRouter();
+
+  // useEffect(() => {
+  //   setTime(
+  //     new Intl.DateTimeFormat("ko", {
+  //       dateStyle: "short",
+  //       timeStyle: "short",
+  //     }).format(new Date())
+  //   );
+  // }, []);
+
   const onClickSubmit = async () => {
+    const time = new Intl.DateTimeFormat("ko", {
+      dateStyle: "short",
+      timeStyle: "short",
+    }).format(new Date());
+
     const board = collection(getFirestore(app), "board");
     // collection은 특정 컬렉션에 대한 참조를 생성하는 역할을 한다.
     // 그리고 getFirestore 함수를 통해 파이어베이스 앱 인스턴스 객체를 가져온다
     // 즉 apa 변수는 initializeApp(firebaseConfig) 이 함수를 통해 파이어베이스를 초기화하여
     // 파이어베이스 프로젝트 구성 정보가 담겨져 있다.
     // 즉 그정보를 app 변수에 담겨져 있고 getFirestore은 새로운 인스턴스 객체를 생성해서 가져오는 역활
-    await addDoc(board, { writer, title, contents }); //
+    await addDoc(board, { writer, title, contents, time }); //
     // getDoc는 컬렉션에 새로운 문서를 추가하는 작업을 수행한다.
     // 왼쪽 매개변수 자리에는 참조할 컬렉션을 말하는 거다.
     // 오른쪽은 추가할 문서의 데이터를 담는다.
