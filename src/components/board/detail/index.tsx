@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { app } from "../../../commons/firebase";
 import { Wrapper } from "./styleds";
 import { useRouter } from "next/router";
+import BoardCommnetUI from "../../boardCommnet";
 
 export default function BoardDetailUI() {
   const [dataBoard, setDataBoard] = useState<DocumentData | undefined>();
@@ -45,6 +46,7 @@ export default function BoardDetailUI() {
       <div>시간: {dataBoard?.time}</div>
       <button onClick={onClickPageMove}>수정하기</button>
       <button onClick={onClickPageMove02}>목록가기</button>
+      <BoardCommnetUI></BoardCommnetUI>
     </Wrapper>
   );
 }
