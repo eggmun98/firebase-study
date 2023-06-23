@@ -6,6 +6,7 @@ import {
   doc,
   getDocs,
   getFirestore,
+  orderBy,
 } from "firebase/firestore/lite";
 import { app } from "../../commons/firebase";
 import { useRouter } from "next/router";
@@ -42,8 +43,10 @@ export default function BoardCommnetUI() {
           doc(getFirestore(app), "board", router.query.id),
           "comments"
         );
+
+        const q = query(comment, orderBy("time"));
         // 게시글 안에 댓글을 참조
-        const result = await getDocs(comment);
+        const result = await getDocs(q);
         const comments = result.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
