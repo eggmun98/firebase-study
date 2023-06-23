@@ -25,7 +25,12 @@ export default function BoardCommnetUI() {
   // board 컬렉션안에 comments 컬렉션을 참조하는 코드이다.
 
   const onClickCommentSubmit = async () => {
-    await addDoc(comment(router.query.id), { content: content });
+    const time = new Intl.DateTimeFormat("ko", {
+      dateStyle: "short",
+      timeStyle: "short",
+    }).format(new Date());
+
+    await addDoc(comment(router.query.id), { content: content, time });
     // addDoc의 두번째 인자에는 객체형태로 보내야 한다.
     alert("댓글을 작성하였습니다.");
   };
@@ -66,6 +71,7 @@ export default function BoardCommnetUI() {
       {commentData.map((el) => (
         <>
           <div>{el.content}</div>
+          <div>{el.time}</div>
         </>
       ))}
     </Wrapper>
