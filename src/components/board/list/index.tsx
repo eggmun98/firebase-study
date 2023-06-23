@@ -3,11 +3,13 @@ import {
   collection,
   getDocs,
   getFirestore,
+  orderBy,
 } from "firebase/firestore/lite";
 import { useEffect, useState } from "react";
 import { app } from "../../../commons/firebase";
 import { Wrapper } from "./styleds";
 import { useRouter } from "next/router";
+import { query } from "firebase/database";
 
 export default function BoardListUI() {
   const [dataBoards, setDataBoards] = useState<DocumentData[]>([]);
@@ -16,7 +18,9 @@ export default function BoardListUI() {
   useEffect(() => {
     const fetchBoards = async () => {
       const board = collection(getFirestore(app), "board");
-      const result = await getDocs(board); // getDoc가 새 문서를 추가하는 거라면 getDocs는 기존의 모든 문서를 가져온다
+      const q = query(board, orderBy("time"));
+      // 파이어베이스에서는 문서를 정렬하려면 orderBy 메서드를 사용해야 한다.
+      const result = await getDocs(q); // getDoc가 새 문서를 추가하는 거라면 getDocs는 기존의 모든 문서를 가져온다
       const boards = result.docs.map((el) => ({
         id: el.id,
         ...el.data(),
@@ -32,6 +36,8 @@ export default function BoardListUI() {
   const onClickPageMove = (id: string) => () => {
     router.push(`/boards/board/${id}`);
   };
+
+  console.log(dataBoards);
 
   return (
     <Wrapper>
