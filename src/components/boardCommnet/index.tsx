@@ -3,6 +3,7 @@ import { CommentWrapper, ContentWrapper, Line, Wrapper } from "./styles";
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDocs,
   getFirestore,
@@ -64,6 +65,32 @@ export default function BoardCommnetUI() {
     console.log("resultData: ", commentData);
   }, [commentData]);
 
+  // const onClickDelete = (id) => async () => {
+  //   const comment = collection(
+  //     doc(getFirestore(app), "board", router.query.id),
+  //     "comments",
+  //     id
+  //   );
+
+  //   await deleteDoc(comment);
+
+  //   alert("댓글이 삭제되었습니다.");
+  // };
+
+  const onClickDelete = (id) => async () => {
+    const commentDoc = doc(
+      getFirestore(app),
+      "board",
+      router.query.id,
+      "comments",
+      id
+    );
+
+    await deleteDoc(commentDoc);
+
+    alert("댓글이 삭제되었습니다.");
+  };
+
   return (
     <Wrapper>
       <ContentWrapper>
@@ -76,6 +103,10 @@ export default function BoardCommnetUI() {
         <CommentWrapper>
           <div>{el.content}</div>
           <div>{el.time}</div>
+          <div>
+            <button onClick={onClickDelete(el.id)}>댓글 삭제</button>
+            <button>댓글 수정</button>
+          </div>
         </CommentWrapper>
       ))}
     </Wrapper>
