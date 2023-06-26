@@ -8,7 +8,7 @@ import {
 } from "firebase/firestore/lite";
 import { useEffect, useState } from "react";
 import { app } from "../../../commons/firebase";
-import { Wrapper } from "./styleds";
+import { ButtonWrapper, Wrapper } from "./styleds";
 import { useRouter } from "next/router";
 import BoardCommnetUI from "../../boardCommnet";
 
@@ -55,9 +55,11 @@ export default function BoardDetailUI() {
       <div>제목: {dataBoard?.title}</div>
       <div>내용: {dataBoard?.contents} </div>
       <div>시간: {dataBoard?.time}</div>
-      <button onClick={onClickPageMove}>수정하기</button>
-      <button onClick={onClickDelete}>삭제하기</button>
-      <button onClick={onClickPageMove02}>목록가기</button>
+      <ButtonWrapper>
+        <button onClick={onClickPageMove}>수정하기</button>
+        <button onClick={onClickDelete}>삭제하기</button>
+        <button onClick={onClickPageMove02}>목록가기</button>
+      </ButtonWrapper>
       <BoardCommnetUI></BoardCommnetUI>
     </Wrapper>
   );

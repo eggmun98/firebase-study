@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Line, Wrapper } from "./styles";
+import { CommentWrapper, ContentWrapper, Line, Wrapper } from "./styles";
 import {
   addDoc,
   collection,
@@ -66,16 +66,17 @@ export default function BoardCommnetUI() {
 
   return (
     <Wrapper>
-      <div>댓글 작성</div>
-      <input onChange={onChangeContent}></input>
-      <button onClick={onClickCommentSubmit}>댓글 작성</button>
+      <ContentWrapper>
+        <input onChange={onChangeContent}></input>
+        <button onClick={onClickCommentSubmit}>댓글 작성</button>
+      </ContentWrapper>
       <Line></Line>
       <div>댓글 목록</div>
       {commentData.map((el) => (
-        <>
+        <CommentWrapper>
           <div>{el.content}</div>
           <div>{el.time}</div>
-        </>
+        </CommentWrapper>
       ))}
     </Wrapper>
   );
