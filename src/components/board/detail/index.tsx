@@ -1,6 +1,7 @@
 import {
   DocumentData,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getFirestore,
@@ -30,6 +31,16 @@ export default function BoardDetailUI() {
     fetchBoard();
   }, []);
 
+  const onClickDelete = async () => {
+    await deleteDoc(
+      doc(collection(getFirestore(app), "board"), `${router.query.id}`)
+    );
+
+    alert("삭제하였습니다.");
+
+    onClickPageMove02();
+  };
+
   const onClickPageMove = () => {
     router.push(`/boards/board/${router.query.id}/edit`);
   };
@@ -45,6 +56,7 @@ export default function BoardDetailUI() {
       <div>내용: {dataBoard?.contents} </div>
       <div>시간: {dataBoard?.time}</div>
       <button onClick={onClickPageMove}>수정하기</button>
+      <button onClick={onClickDelete}>삭제하기</button>
       <button onClick={onClickPageMove02}>목록가기</button>
       <BoardCommnetUI></BoardCommnetUI>
     </Wrapper>
