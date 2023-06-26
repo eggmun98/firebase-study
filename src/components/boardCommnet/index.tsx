@@ -8,6 +8,7 @@ import {
   getDocs,
   getFirestore,
   orderBy,
+  updateDoc,
 } from "firebase/firestore/lite";
 import { app } from "../../commons/firebase";
 import { useRouter } from "next/router";
@@ -16,6 +17,7 @@ import { query } from "firebase/database";
 export default function BoardCommnetUI() {
   const [content, setContent] = useState("");
   const [commentData, setCommentData] = useState([]);
+  const [myIndex, setMyIndex] = useState(-1);
   const router = useRouter();
 
   const onChangeContent = (e) => {
@@ -65,18 +67,6 @@ export default function BoardCommnetUI() {
     console.log("resultData: ", commentData);
   }, [commentData]);
 
-  // const onClickDelete = (id) => async () => {
-  //   const comment = collection(
-  //     doc(getFirestore(app), "board", router.query.id),
-  //     "comments",
-  //     id
-  //   );
-
-  //   await deleteDoc(comment);
-
-  //   alert("댓글이 삭제되었습니다.");
-  // };
-
   const onClickDelete = (id) => async () => {
     const commentDoc = doc(
       getFirestore(app),
@@ -91,6 +81,32 @@ export default function BoardCommnetUI() {
     alert("댓글이 삭제되었습니다.");
   };
 
+  const onClickIndexEdit = (index) => () => {
+    setMyIndex(index);
+  };
+
+  const onClickIndexExit = () => {
+    setMyIndex(-1);
+  };
+
+  const onChangeContentEdit = (e) => {
+    setContent(e.target.value);
+  };
+
+  const onClickCommentEdit = (id) => async () => {
+    const commentDoc = doc(
+      getFirestore(app),
+      "board",
+      router.query.id,
+      "comments",
+      id
+    );
+
+    await updateDoc(commentDoc, { content });
+    alert("댓글을 수정하였습니다.");
+    setMyIndex(-1);
+  };
+
   return (
     <Wrapper>
       <ContentWrapper>
@@ -99,14 +115,26 @@ export default function BoardCommnetUI() {
       </ContentWrapper>
       <Line></Line>
       <div>댓글 목록</div>
-      {commentData.map((el) => (
+      {commentData.map((el, index) => (
         <CommentWrapper>
-          <div>{el.content}</div>
-          <div>{el.time}</div>
-          <div>
-            <button onClick={onClickDelete(el.id)}>댓글 삭제</button>
-            <button>댓글 수정</button>
-          </div>
+          {index !== myIndex ? (
+            <>
+              <div>{el.content}</div>
+              <div>{el.time}</div>
+              <div>
+                <button onClick={onClickDelete(el.id)}>댓글 삭제</button>
+                <button onClick={onClickIndexEdit(index)}>댓글 수정</button>
+              </div>
+            </>
+          ) : (
+            <>
+              <input onChange={onChangeContentEdit}></input>
+              <div>
+                <button onClick={onClickIndexExit}>수정 취소</button>
+                <button onClick={onClickCommentEdit(el.id)}>수정 완료</button>
+              </div>
+            </>
+          )}
         </CommentWrapper>
       ))}
     </Wrapper>
