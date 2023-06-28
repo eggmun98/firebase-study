@@ -18,6 +18,7 @@ export default function BoardListUI() {
   const router = useRouter();
 
   useEffect(() => {
+    // 게시글 데이터 불러오는 함수
     const fetchBoards = async () => {
       const board = collection(getFirestore(app), "board");
       const q = query(board, orderBy("time"));
@@ -35,14 +36,17 @@ export default function BoardListUI() {
     fetchBoards();
   }, []);
 
+  // 페이지 이동 함수
   const onClickPageMove = (id: string) => () => {
     router.push(`/boards/board/${id}`);
   };
 
+  // 검색 인풋창 값 가져오는 함수
   const onChangeKeyword = (e) => {
     setKeyword(e.target.value);
   };
 
+  // keyword와 맞는 데이터를 가져오는 검색 함수
   const searchBarFn = async () => {
     const boards = await getDocs(collection(getFirestore(app), "board"));
     const searchBoard = boards.docs.filter((doc) => {

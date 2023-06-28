@@ -18,6 +18,7 @@ export default function BoardDetailUI() {
   console.log(router);
 
   useEffect(() => {
+    // 상세 데이터 가져오는 함수
     const fetchBoard = async () => {
       const board = doc(
         collection(getFirestore(app), "board"),
@@ -31,6 +32,7 @@ export default function BoardDetailUI() {
     fetchBoard();
   }, []);
 
+  // 게시글 삭제 함수
   const onClickDelete = async () => {
     await deleteDoc(
       doc(collection(getFirestore(app), "board"), `${router.query.id}`)

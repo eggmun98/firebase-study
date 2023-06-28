@@ -20,6 +20,7 @@ export default function BoardCommnetUI() {
   const [myIndex, setMyIndex] = useState(-1);
   const router = useRouter();
 
+  // 댓글 내용 값 가져오는 함수
   const onChangeContent = (e) => {
     setContent(e.target.value);
   };
@@ -28,6 +29,7 @@ export default function BoardCommnetUI() {
     collection(doc(getFirestore(app), "board", id), "comments");
   // board 컬렉션안에 comments 컬렉션을 참조하는 코드이다.
 
+  // 댓글 작성 함수
   const onClickCommentSubmit = async () => {
     const time = new Intl.DateTimeFormat("ko", {
       dateStyle: "short",
@@ -40,6 +42,7 @@ export default function BoardCommnetUI() {
   };
 
   useEffect(() => {
+    // 댓글 목록 가져오는 함수
     const fetchComment = async () => {
       if (router.query.id) {
         const comment = collection(
@@ -61,12 +64,13 @@ export default function BoardCommnetUI() {
       console.log("resultData: ", commentData);
     };
     fetchComment();
-  }, []);
-
-  useEffect(() => {
-    console.log("resultData: ", commentData);
   }, [commentData]);
 
+  // useEffect(() => {
+  //   console.log("resultData: ", commentData);
+  // }, [commentData]);
+
+  // 댓글 삭제 함수
   const onClickDelete = (id) => async () => {
     const commentDoc = doc(
       getFirestore(app),
@@ -81,18 +85,22 @@ export default function BoardCommnetUI() {
     alert("댓글이 삭제되었습니다.");
   };
 
+  // 댓글 수정창 여는 함수
   const onClickIndexEdit = (index) => () => {
     setMyIndex(index);
   };
 
+  // 댓글 수정창 닫는 함수
   const onClickIndexExit = () => {
     setMyIndex(-1);
   };
 
-  const onChangeContentEdit = (e) => {
-    setContent(e.target.value);
-  };
+  // 수정된 댓글 내용 값 가져오는 함수 // 이건 필요 없을 듯
+  // const onChangeContentEdit = (e) => {
+  //   setContent(e.target.value);
+  // };
 
+  // 댓글 수정 함수
   const onClickCommentEdit = (id) => async () => {
     const commentDoc = doc(
       getFirestore(app),
@@ -128,7 +136,7 @@ export default function BoardCommnetUI() {
             </>
           ) : (
             <>
-              <input onChange={onChangeContentEdit}></input>
+              <input onChange={onChangeContent}></input>
               <div>
                 <button onClick={onClickIndexExit}>수정 취소</button>
                 <button onClick={onClickCommentEdit(el.id)}>수정 완료</button>
