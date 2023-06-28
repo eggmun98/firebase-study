@@ -44,6 +44,7 @@ export default function BoardListUI() {
   // 검색 인풋창 값 가져오는 함수
   const onChangeKeyword = (e) => {
     setKeyword(e.target.value);
+    searchBarFn(); // 실시간 검색
   };
 
   // keyword와 맞는 데이터를 가져오는 검색 함수
