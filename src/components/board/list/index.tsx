@@ -13,6 +13,8 @@ import { query } from "firebase/database";
 
 export default function BoardListUI() {
   const [dataBoards, setDataBoards] = useState<DocumentData[]>([]);
+  const [keyword, setKeyword] = useState("");
+  const [searchData, setSearchData] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -37,12 +39,41 @@ export default function BoardListUI() {
     router.push(`/boards/board/${id}`);
   };
 
-  console.log(dataBoards);
+  const onChangeKeyword = (e) => {
+    setKeyword(e.target.value);
+  };
+
+  const searchBarFn = async () => {
+    const boards = await getDocs(collection(getFirestore(app), "board"));
+    const searchBoard = boards.docs.filter((doc) => {
+      const board = doc.data();
+      console.log("qq", boards);
+
+      return board.title.includes(keyword);
+    });
+    const result = searchBoard.map((doc) => ({ id: doc.id, ...doc.data() }));
+    setSearchData(result);
+  };
+  console.log("keyword: ", keyword);
 
   return (
     <Wrapper>
       {dataBoards.map((el) => (
         <div key={el.id} onClick={onClickPageMove(el.id)}>
+          <div>작성자: {el.writer}</div>
+          <div>제목: {el.title}</div>
+          <div>내용: {el.contents}</div>
+          <div>시간: {el.time}</div>
+        </div>
+      ))}
+
+      <div>
+        <div>검색 기능</div>
+        <input onChange={onChangeKeyword}></input>
+        <button onClick={searchBarFn}>검색</button>
+      </div>
+      {searchData.map((el) => (
+        <div>
           <div>작성자: {el.writer}</div>
           <div>제목: {el.title}</div>
           <div>내용: {el.contents}</div>
